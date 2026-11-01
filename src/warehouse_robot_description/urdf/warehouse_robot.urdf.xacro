@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<robot name="warehouse_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="lidar" default="true"/>
+  <xacro:arg name="camera" default="true"/>
+  <xacro:arg name="imu" default="true"/>
+  <xacro:property name="wheel_radius" value="0.075"/>
+  <xacro:property name="wheel_width" value="0.04"/>
+  <xacro:property name="track" value="0.36"/>
+  <material name="orange"><color rgba="0.95 0.40 0.06 1"/></material>
+  <material name="slate"><color rgba="0.16 0.22 0.28 1"/></material>
+  <material name="rubber"><color rgba="0.045 0.05 0.055 1"/></material>
+  <material name="silver"><color rgba="0.65 0.70 0.73 1"/></material>
+  <material name="glass"><color rgba="0.05 0.65 0.72 1"/></material>
+  <material name="light"><color rgba="1 0.95 0.70 1"/></material>
+
+  <xacro:macro name="box_inertia" params="mass x y z xyz:='0 0 0'">
+    <inertial>
+      <origin xyz="${xyz}"/>
+      <mass value="${mass}"/>
+      <inertia ixx="${mass*(y*y+z*z)/12}" ixy="0" ixz="0"
+               iyy="${mass*(x*x+z*z)/12}" iyz="0" izz="${mass*(x*x+y*y)/12}"/>
+    </inertial>
+  </xacro:macro>
+  <xacro:macro name="box_visual" params="name xyz size material">
+    <visual name="${name}">
+      <origin xyz="${xyz}"/><geometry><box size="${size}"/></geometry>
+      <material name="${material}"/>
+    </visual>
+  </xacro:macro>
+  <xacro:macro name="fixed_joint" params="name parent child xyz rpy:='0 0 0'">
+    <joint name="${name}" type="fixed">
+      <parent link="${parent}"/><child link="${child}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+
+  <link name="base_footprint"/>
+  <xacro:fixed_joint name="base_joint" parent="base_footprint" child="base_link" xyz="0 0 0.16"/>
+  <link name="base_link">
+    <xacro:box_inertia mass="6.0" x="0.46" y="0.30" z="0.12" xyz="-0.04 0 0"/>
+    <visual name="body"><geometry><mesh filename="file://$(find warehouse_robot_description)/meshes/body.dae"/></geometry></visual>
+    <collision name="chassis"><origin xyz="-0.04 0 0"/><geometry><box size="0.46 0.30 0.12"/></geometry></collision>
+    <collision name="equipment_cover"><origin xyz="-0.085 0 0.08"/><geometry><box size="0.29 0.24 0.04"/></geometry></collision>
+    <collision name="front_bumper"><origin xyz="0.195 0 -0.025"/><geometry><box size="0.025 0.31 0.045"/></geometry></collision>
+    <collision name="rear_bumper"><origin xyz="-0.275 0 -0.025"/><geometry><box size="0.025 0.31 0.045"/></geometry></collision>
+    <collision name="sensor_mast"><origin xyz="0.04 0 0.125"/><geometry><box size="0.025 0.035 0.13"/></geometry></collision>
+  </link>
+
+  <xacro:macro name="wheel" params="side sign">
+    <joint name="${side}_wheel_joint" type="continuous">
+      <parent link="base_link"/><child link="${side}_wheel_link"/>
+      <origin xyz="0 ${sign*track/2} -0.085"/>
+      <axis xyz="0 1 0"/><limit effort="5" velocity="15"/>
+      <dynamics damping="0.01" friction="0"/>
+    </joint>
+    <link name="${side}_wheel_link">
+      <inertial>
+        <mass value="0.32"/>
+        <inertia ixx="${0.32*(3*wheel_radius**2+wheel_width**2)/12}" ixy="0" ixz="0"
+                 iyy="${0.32*wheel_radius**2/2}" iyz="0"
+                 izz="${0.32*(3*wheel_radius**2+wheel_width**2)/12}"/>
+      </inertial>
+      <visual name="tire"><origin rpy="${pi/2} 0 0"/><geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry><material name="rubber"/></visual>
+      <visual name="hub"><origin xyz="0 ${sign*0.021} 0" rpy="${pi/2} 0 0"/><geometry><cylinder radius="0.036" length="0.003"/></geometry><material name="silver"/></visual>
+      <visual name="wheel_trim"><origin xyz="0 ${sign*0.0229} 0" rpy="${-sign*pi/2} 0 0"/><geometry><mesh filename="file://$(find warehouse_robot_description)/meshes/wheel_trim.dae"/></geometry></visual>
+      <collision name="tire"><origin rpy="${pi/2} 0 0"/><geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry></collision>
+    </link>
+    <gazebo reference="${side}_wheel_link"><mu1>1.0</mu1><mu2>1.0</mu2></gazebo>
+  </xacro:macro>
+  <xacro:wheel side="left" sign="1"/>
+  <xacro:wheel side="right" sign="-1"/>
+
+  <xacro:fixed_joint name="caster_joint" parent="base_link" child="caster_link" xyz="-0.20 0 -0.135"/>
+  <link name="caster_link">
+    <inertial><mass value="0.10"/><inertia ixx="0.000025" ixy="0" ixz="0" iyy="0.000025" iyz="0" izz="0.000025"/></inertial>
+    <visual><geometry><sphere radius="0.025"/></geometry><material name="silver"/></visual>
+    <collision><geometry><sphere radius="0.025"/></geometry></collision>
+  </link>
+  <gazebo reference="caster_joint"><preserveFixedJoint>true</preserveFixedJoint></gazebo>
+  <gazebo reference="caster_link"><mu1>0.001</mu1><mu2>0.001</mu2></gazebo>
+
+  <xacro:fixed_joint name="lidar_joint" parent="base_link" child="lidar_link" xyz="0.04 0 0.185"/>
+  <link name="lidar_link">
+    <xacro:box_inertia mass="0.15" x="0.08" y="0.08" z="0.035"/>
+    <visual name="lidar_shell"><geometry><mesh filename="file://$(find warehouse_robot_description)/meshes/lidar_shell.dae"/></geometry></visual>
+    <collision><geometry><cylinder radius="0.04" length="0.035"/></geometry></collision>
+  </link>
+  <gazebo reference="lidar_joint"><preserveFixedJoint>true</preserveFixedJoint></gazebo>
+  <xacro:if value="$(arg lidar)">
+    <gazebo reference="lidar_link">
+      <sensor name="lidar" type="gpu_lidar">
+        <always_on>true</always_on><update_rate>10</update_rate><topic>/scan</topic><frame_id>lidar_link</frame_id>
+        <lidar><scan>
+          <horizontal><samples>720</samples><resolution>1</resolution><min_angle>${-pi}</min_angle><max_angle>${pi}</max_angle></horizontal>
+          <vertical><samples>1</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>0</max_angle></vertical>
+        </scan><range><min>0.10</min><max>8.0</max><resolution>0.01</resolution></range></lidar>
+      </sensor>
+    </gazebo>
+  </xacro:if>
+
+  <xacro:fixed_joint name="camera_joint" parent="base_link" child="camera_link" xyz="0.16 0 0.12"/>
+  <link name="camera_link">
+    <xacro:box_inertia mass="0.10" x="0.04" y="0.07" z="0.04"/>
+    <visual name="camera_shell"><geometry><mesh filename="file://$(find warehouse_robot_description)/meshes/camera_shell.dae"/></geometry></visual>
+    <collision><geometry><box size="0.04 0.07 0.04"/></geometry></collision>
+  </link>
+  <gazebo reference="camera_joint"><preserveFixedJoint>true</preserveFixedJoint></gazebo>
+  <link name="camera_optical_frame"/>
+  <xacro:fixed_joint name="camera_optical_joint" parent="camera_link" child="camera_optical_frame" xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+  <xacro:if value="$(arg camera)">
+    <gazebo reference="camera_link">
+      <sensor name="camera" type="camera">
+        <always_on>true</always_on><update_rate>10</update_rate><topic>/camera/image_raw</topic><frame_id>camera_optical_frame</frame_id>
+        <camera><horizontal_fov>${70*pi/180}</horizontal_fov>
+          <camera_info_topic>/camera/camera_info</camera_info_topic>
+          <image><width>480</width><height>360</height><format>R8G8B8</format></image>
+          <clip><near>0.05</near><far>15</far></clip>
+        </camera>
+      </sensor>
+    </gazebo>
+  </xacro:if>
+
+  <xacro:fixed_joint name="imu_joint" parent="base_link" child="imu_link" xyz="-0.04 0 0"/>
+  <link name="imu_link">
+    <xacro:box_inertia mass="0.05" x="0.025" y="0.025" z="0.012"/>
+    <xacro:box_visual name="imu" xyz="0 0 0" size="0.025 0.025 0.012" material="glass"/>
+  </link>
+  <gazebo reference="imu_joint"><preserveFixedJoint>true</preserveFixedJoint></gazebo>
+  <xacro:if value="$(arg imu)">
+    <gazebo reference="imu_link">
+      <sensor name="imu" type="imu"><always_on>true</always_on><update_rate>50</update_rate><topic>/imu/data</topic><frame_id>imu_link</frame_id><imu/></sensor>
+    </gazebo>
+  </xacro:if>
+
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint><right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>${track}</wheel_separation><wheel_radius>${wheel_radius}</wheel_radius>
+      <topic>/model/warehouse_robot/cmd_vel</topic><odom_topic>/model/warehouse_robot/odometry</odom_topic><tf_topic>/model/warehouse_robot/tf</tf_topic>
+      <frame_id>odom</frame_id><child_frame_id>base_footprint</child_frame_id><odom_publish_frequency>50</odom_publish_frequency>
+      <max_linear_velocity>0.30</max_linear_velocity><min_linear_velocity>-0.30</min_linear_velocity>
+      <max_angular_velocity>0.8</max_angular_velocity><min_angular_velocity>-0.8</min_angular_velocity>
+      <max_linear_acceleration>0.5</max_linear_acceleration><min_linear_acceleration>-0.5</min_linear_acceleration>
+      <max_angular_acceleration>1.5</max_angular_acceleration><min_angular_acceleration>-1.5</min_angular_acceleration>
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>/model/warehouse_robot/joint_state</topic><joint_name>left_wheel_joint</joint_name><joint_name>right_wheel_joint</joint_name>
+      <update_rate>50</update_rate>
+    </plugin>
+  </gazebo>
+</robot>
