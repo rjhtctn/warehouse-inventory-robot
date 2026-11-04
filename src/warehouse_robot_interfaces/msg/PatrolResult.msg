@@ -1,0 +1,13 @@
+std_msgs/Header header
+bool success
+string status
+string detail
+warehouse_robot_interfaces/ShelfInventory[] shelves
+uint16 required_stations
+uint16 completed_stations
+uint32 total_red
+uint32 total_blue
+uint32 total_visible
+float32 home_position_error
+float32 home_heading_error
+float32 duration

@@ -1,0 +1,13 @@
+std_msgs/Header header
+bool success
+string status
+string detail
+uint16 upper_red
+uint16 upper_blue
+uint16 lower_red
+uint16 lower_blue
+uint16 total_visible
+float32 heading_error
+float32 distance_error
+float32 lateral_error
+uint16 stable_frames

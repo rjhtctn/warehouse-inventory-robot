@@ -1,0 +1,2 @@
+string shelf_id
+warehouse_robot_interfaces/InspectionResult inspection
