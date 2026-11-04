@@ -1,0 +1,149 @@
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+- Class: rviz_common/Views
+  Name: Views
+Visualization Manager:
+  Class: ''
+  Enabled: true
+  Global Options:
+    Fixed Frame: odom
+    Background Color: 35; 40; 48
+    Frame Rate: 15
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Name: Grid
+    Enabled: true
+    Cell Size: 0.5
+    Plane Cell Count: 30
+    Color: 110; 120; 130
+  - Class: rviz_default_plugins/RobotModel
+    Name: Robot
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_description
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      History Policy: Keep Last
+      Depth: 1
+    Visual Enabled: true
+    Collision Enabled: false
+  - Class: rviz_default_plugins/LaserScan
+    Name: LiDAR
+    Enabled: true
+    Topic:
+      Value: /scan
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 1
+    Size (m): 0.025
+    Style: Flat Squares
+    Color Transformer: FlatColor
+    Color: 60; 240; 120
+    Decay Time: 0
+  - Class: rviz_default_plugins/Image
+    Name: Live camera
+    Enabled: true
+    Topic:
+      Value: /camera/image_raw
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 1
+    Normalize Range: true
+    Transport Hint: raw
+  - Class: rviz_default_plugins/Image
+    Name: Last inspection (historical)
+    Enabled: true
+    Topic:
+      Value: /patrol/inspection/image
+      Reliability Policy: Reliable
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Depth: 1
+    Normalize Range: true
+    Transport Hint: raw
+  - Class: rviz_imu_plugin/Imu
+    Name: IMU
+    Enabled: true
+    Topic:
+      Value: /imu/data
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Depth: 5
+    fixed_frame_orientation: true
+    Axes properties:
+      Enable axes: true
+      Axes scale: 0.22
+    Acceleration properties:
+      Enable acceleration: true
+      Derotate acceleration: true
+      Acc. vector scale: 0.015
+      Acc. vector color: 255; 190; 60
+      Acc. vector alpha: 1
+    Box properties:
+      Enable box: false
+  - Class: rviz_default_plugins/TF
+    Name: Frames
+    Enabled: false
+    Show Names: true
+    Marker Scale: 0.2
+  - Class: rviz_default_plugins/Path
+    Name: Patrol route
+    Enabled: true
+    Topic:
+      Value: /patrol/route
+      Reliability Policy: Reliable
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Depth: 1
+    Color: 235; 180; 65
+    Line Style: Billboards
+    Line Width: 0.025
+  - Class: rviz_default_plugins/Path
+    Name: Measured trajectory
+    Enabled: true
+    Topic:
+      Value: /patrol/path
+      Reliability Policy: Reliable
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Depth: 1
+    Color: 90; 180; 240
+    Line Style: Billboards
+    Line Width: 0.018
+  Tools:
+  - Class: rviz_default_plugins/Interact
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/Select
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Target Frame: odom
+      Distance: 7.2
+      Pitch: 1.0
+      Yaw: 0.8
+      Focal Point:
+        X: 1.5
+        Y: 0
+        Z: 0.1
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 900
+  Hide Left Dock: false
+  Hide Right Dock: false
+  Last inspection (historical):
+    collapsed: false
+  Live camera:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000002000000000000015600000330fc0200000001fc0000003a00000330000000e001000019fa000000000200000002fb000000100044006900730070006c0061007900730100000000ffffffff000000c600fffffffb0000000a005600690065007700730100000000ffffffff0000009e00ffffff000000010000019000000330fc0200000002fb00000016004c006900760065002000630061006d006500720061010000003a000001950000001600fffffffb00000038004c00610073007400200069006e007300700065006300740069006f006e002000280068006900730074006f0072006900630061006c002901000001d5000001950000001600ffffff000002ae0000033000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Views:
+    collapsed: false
+  Width: 1440
+  X: 20
+  Y: 40
