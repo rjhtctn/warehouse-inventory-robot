@@ -1,0 +1,16 @@
+inventory_mission:
+  ros__parameters:
+    station_x: -1.45
+    station_front_y: 1.64
+    shelf_heading: 1.5707963267948966
+    inspection_distance: 2.40
+    linear_speed: 0.18
+    approach_speed: 0.07
+    angular_speed: 0.40
+    sensor_timeout: 0.50
+    camera_timeout: 0.80
+    startup_timeout: 12.0
+    failure_timeout: 2.0
+    mission_timeout: 100.0
+    stable_seconds: 1.2
+    stable_frames: 8

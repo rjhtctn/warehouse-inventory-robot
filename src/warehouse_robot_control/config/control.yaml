@@ -1,0 +1,17 @@
+obstacle_avoidance:
+  ros__parameters:
+    forward_speed: 0.20
+    turn_speed: 0.60
+    stop_distance: 0.65
+    resume_distance: 0.90
+    turn_clearance: 0.42
+    scan_timeout: 0.50
+    brake_time: 0.40
+    min_turn_time: 0.50
+    max_turn_time: 10.0
+    clear_scans: 3
+motion_guard:
+  ros__parameters:
+    command_timeout: 0.35
+    max_linear_speed: 0.30
+    max_angular_speed: 0.80

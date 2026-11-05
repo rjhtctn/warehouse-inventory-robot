@@ -1,0 +1,17 @@
+inventory_patrol:
+  ros__parameters:
+    mission_timeout: 420.0
+    avoid_timeout: 65.0
+    waypoint_timeout: 30.0
+    progress_timeout: 15.0
+    station_ids: [north_west, south_west]
+    station_xs: [-1.45, -1.45]
+    station_front_ys: [1.64, -1.64]
+    station_headings: [1.5707963267948966, -1.5707963267948966]
+    route_north_west: [-2.10, -0.95, -1.45, -0.95]
+    route_south_west: [0.35, -0.85, 0.35, 0.85, -1.45, 0.95]
+    route_home: [-2.80, 0.90, -2.80, 0.0]
+    home_heading: 0.0
+    west_wall: -3.94
+    north_wall: 2.94
+    south_wall: -2.94
