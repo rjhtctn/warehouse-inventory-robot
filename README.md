@@ -246,3 +246,12 @@ warehouse-inventory-robot/
 - Sensor monitoring: LiDAR, RGB camera, and IMU data acquisition and visualization.
 
 The ROS 2 packages and simulation files are maintained in the shared project repository.
+
+## 12. Team Members
+
+| Student | Name | Student ID | GitHub | Main responsibilities |
+|---|---|---|---|---|
+| Student 1 | Yusuf Emre Gözcü | 1306220090 | [@Parzival51](https://github.com/Parzival51) | LiDAR monitoring, navigation, local A* obstacle avoidance, shelf alignment, and HSV-based box counting |
+| Student 2 | Rojhat Çetin | 1306220111 | [@rjhtctn](https://github.com/rjhtctn) | URDF/Xacro robot model, sensor placement, RGB camera integration, Gazebo simulation, and RViz configuration |
+
+Both students contributed to IMU integration, data acquisition, and visualization.
